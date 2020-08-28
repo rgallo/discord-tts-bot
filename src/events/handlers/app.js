@@ -33,7 +33,7 @@ const handleInvalidated = () => {
 };
 
 const handleMessage = (message, client) => {
-  if (!message.content.startsWith(prefix) || message.author.bot || !message.guild) {
+  if (!message.content.startsWith(prefix) || !message.author.username === "Al Mlichaels" || !message.guild) {
     return;
   }
 
