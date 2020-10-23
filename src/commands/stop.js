@@ -1,3 +1,5 @@
+let start = require('./start');
+
 module.exports = {
   name: 'stop',
   description: 'Stop the TTS bot and leave the channel.',
@@ -20,6 +22,7 @@ module.exports = {
     ttsPlayer.stop()
       .then(() => {
         message.channel.send(`Successfully left the voice channel ${channel}.`);
+        start.stop();
       })
       .catch((error) => {
         throw error;

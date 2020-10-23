@@ -3,11 +3,16 @@ const { splitToPlayable } = require('../common/utils');
 const allowOver200 = process.env.ALLOW_OVER_200 || require('../../config/settings.json').allow_more_than_200_chars;
 const default_voice_channel = process.env.DEFAULT_VOICE_CHANNEL || require('../../config/settings.json').default_voice_channel;
 const prefix = process.env.PREFIX || require('../../config/settings.json').prefix;
+let listening = false;
 
 module.exports = {
   name: 'start',
   description: `Start`,
   emoji: ':speaking_head:',
+  listening: listening,
+  stop() {
+    listening = false;
+  },
   execute(message, options, client) {
     let { channel } = message.member.voice;
     const { ttsPlayer, name: guildName, voice } = message.guild;
@@ -33,6 +38,11 @@ module.exports = {
       return;
     }
 
+    if (listening) {
+      return;
+    }
+
+    listening = true;
     let filter = newMsg => newMsg.author.id === message.author.id && newMsg.channel.id === message.channel.id && newMsg.content;
     let collector = message.channel.createMessageCollector(filter);
     collector.on('collect', async newMsg => {
