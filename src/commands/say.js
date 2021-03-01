@@ -1,11 +1,9 @@
 const logger = require('@greencoast/logger');
-const { splitToPlayable } = require('../common/utils');
-const allowOver200 = process.env.ALLOW_OVER_200 || require('../../config/settings.json').allow_more_than_200_chars;
 const default_voice_channel = process.env.DEFAULT_VOICE_CHANNEL || require('../../config/settings.json').default_voice_channel;
 
 module.exports = {
   name: 'say',
-  description: `Send a TTS message in your voice channel${allowOver200 ? '.' : ' (Up to 200 characters).'}`,
+  description: `Send a TTS message in your voice channel.}`,
   emoji: ':speaking_head:',
   execute(message, options, client) {
     let { channel } = message.member.voice;
@@ -33,29 +31,17 @@ module.exports = {
     }
 
     if (connection) {
-      splitToPlayable(options.args)
-        .then((phrases) => {
-          ttsPlayer.say(phrases);
-        })
-        .catch((error) => {
-          message.reply(error);
-        });
+      ttsPlayer.say(options.args.join(' '));
     } else {
       channel.join()
         .then(() => {
           logger.info(`Joined ${channel.name} in ${guildName}.`);
           message.channel.send(`Joined ${channel}.`);
-          splitToPlayable(options.args)
-            .then((phrases) => {
-              ttsPlayer.say(phrases);
-            })
-            .catch((error) => {
-              message.reply(error);
-            });
+          ttsPlayer.say(options.args.join(' '));
         })
         .catch((error) => {
           throw error;
         });
     }
   }
-}
+};
