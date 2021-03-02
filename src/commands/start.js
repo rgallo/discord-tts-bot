@@ -1,5 +1,4 @@
 const logger = require('@greencoast/logger');
-const { splitToPlayable } = require('../common/utils');
 const allowOver200 = process.env.ALLOW_OVER_200 || require('../../config/settings.json').allow_more_than_200_chars;
 const default_voice_channel = process.env.DEFAULT_VOICE_CHANNEL || require('../../config/settings.json').default_voice_channel;
 const prefix = process.env.PREFIX || require('../../config/settings.json').prefix;
@@ -52,8 +51,7 @@ module.exports = {
 
         if (voice && voice.connection) {
             try {
-                let phrases = await splitToPlayable(newMsg.content.split(" "));
-                ttsPlayer.say(phrases);
+                ttsPlayer.say(newMsg.content);
             } catch (error) {
                 console.log(error);
                 message.reply(error);

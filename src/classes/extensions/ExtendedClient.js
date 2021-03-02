@@ -49,7 +49,7 @@ class ExtendedClient extends Client {
 
     try {
       logger.info(`User ${author} issued command ${commandName} in ${origin}.`);
-      command.execute(message, options);
+      command.execute(message, options, this);
     } catch (error) {
       logger.error(error);
       message.reply("there's been a problem executing your command.");
